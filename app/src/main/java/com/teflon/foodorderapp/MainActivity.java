@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         list.add(new MainModel(R.drawable.burger,"Burger","5","Chicken Burger With extra cheese"));
         list.add(new MainModel(R.drawable.burger1,"Burger Again","15","Beef Burger With extra cheese"));
         list.add(new MainModel(R.drawable.pizza,"Pizza","25","Chicken Pizza With extra Topping"));
-        list.add(new MainModel(R.drawable.burger,"Burger","2","haha Burger With extra chicken"));
+        list.add(new MainModel(R.drawable.burger,"Shawarma","2","haha Burger With extra chicken"));
         list.add(new MainModel(R.drawable.burger,"Burger","17","heheheh Burger With extra cheese"));
         list.add(new MainModel(R.drawable.burger,"Burger","17","whattth Burger With extra cheese"));
 
