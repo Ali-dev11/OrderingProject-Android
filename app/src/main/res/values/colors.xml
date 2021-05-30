@@ -18,5 +18,8 @@
     <color name="gradientEndColor">#FDE02F</color>
     <color name="etStrokeColor">#A89202</color>
 
+    <color name="color_preloader_start">#fdb6b6</color>
+    <color name="color_preloader_center">#fdb6b6</color>
+    <color name="color_preloader_end">#ffffff</color>
 
 </resources>
