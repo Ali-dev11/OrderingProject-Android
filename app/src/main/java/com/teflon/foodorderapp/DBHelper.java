@@ -37,11 +37,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 "description text," +
                 "foodname text)"
         );
+        db.execSQL("create Table users(username TEXT primary key, password TEXT)");
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP table if exists orders");
+        db.execSQL("DROP table if exists users");
         onCreate(db);
     }
 
@@ -113,6 +116,38 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase database=this.getWritableDatabase();
         return database.delete("orders","id="+id,null);
     }
+
+
+    public Boolean insertData(String username, String password){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("username",username);
+        contentValues.put("password",password);
+        long result=db.insert("users",null,contentValues);
+        if(result==-1)  return false;
+        else return true;
+
+    }
+    public Boolean checkusername(String username){
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cursor=db.rawQuery("Select * from users where username = ?",new String[]{username});
+        if(cursor.getCount()>0){
+            return true;
+        }else
+            return false;
+    }
+    public Boolean checkusernamepassword(String username,String password){
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cursor=db.rawQuery("Select * from users where username = ? and password=?",new String[]{username,password});
+        if(cursor.getCount()>0){
+            return true;
+        }else
+            return false;
+    }
+
+
+
+
 
 }
 
