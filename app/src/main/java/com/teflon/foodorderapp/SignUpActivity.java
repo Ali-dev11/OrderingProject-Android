@@ -7,67 +7,59 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SignUpActivity extends AppCompatActivity {
-EditText username,password, repassword;
-Button signup,signin;
-DBHelper db;
+    DatabaseHelper db;
+    EditText mTextUsername;
+    EditText mTextPassword;
+    EditText mTextCnfPassword;
+    Button mButtonRegister;
+    TextView mTextViewLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        username=(EditText) findViewById(R.id.username);
-        password=(EditText) findViewById(R.id.password);
-        repassword=(EditText) findViewById(R.id.repassword);
-        signup=(Button) findViewById(R.id.btnsignup);
-        signin=(Button) findViewById(R.id.btnsignin);
-        db=new DBHelper(this);
-
-
-        signup.setOnClickListener(new View.OnClickListener() {
+        db = new DatabaseHelper(this);
+        mTextUsername = (EditText)findViewById(R.id.edittext_username);
+        mTextPassword = (EditText)findViewById(R.id.edittext_password);
+        mTextCnfPassword = (EditText)findViewById(R.id.edittext_cnf_password);
+        mButtonRegister = (Button)findViewById(R.id.button_register);
+        mTextViewLogin = (TextView)findViewById(R.id.textview_login);
+        mTextViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String user=username.getText().toString();
-                String pass=password.getText().toString();
-                String repass=repassword.getText().toString();
+            public void onClick(View view) {
+                Intent LoginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
+                startActivity(LoginIntent);
+            }
+        });
 
-                if(user.equals("")|| pass.equals("")||repass.equals("")){
-                    Toast.makeText(SignUpActivity.this, "Please Enter all the Field", Toast.LENGTH_SHORT).show();
-                }else{
-                    if(pass.equals(repass)){
-                        Boolean checkuser=db.checkusername(user);
-                        if(checkuser==false){
-                            Boolean insert=db.insertData(user,pass);
-                            if(insert==true){
-                                Toast.makeText(SignUpActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
-                                startActivity(intent);
-                            }else{
-                                Toast.makeText(SignUpActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }else{
-                            Toast.makeText(SignUpActivity.this, "User Already exists! Please sign in", Toast.LENGTH_SHORT).show();
+        mButtonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user = mTextUsername.getText().toString().trim();
+                String pwd = mTextPassword.getText().toString().trim();
+                String cnf_pwd = mTextCnfPassword.getText().toString().trim();
 
-                        }
-                    }else{
-                        Toast.makeText(SignUpActivity.this, "Passwords Not Matching", Toast.LENGTH_SHORT).show();
-
+                if(pwd.equals(cnf_pwd)){
+                    long val = db.addUser(user,pwd);
+                    if(val > 0){
+                        Toast.makeText(SignUpActivity.this,"You have registered",Toast.LENGTH_SHORT).show();
+                        Intent moveToLogin = new Intent(SignUpActivity.this,LoginActivity.class);
+                        startActivity(moveToLogin);
                     }
+                    else{
+                        Toast.makeText(SignUpActivity.this,"Registeration Error",Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-
-
+                else{
+                    Toast.makeText(SignUpActivity.this,"Password is not matching",Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
     }
 }
